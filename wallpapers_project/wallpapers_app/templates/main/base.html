@@ -1,0 +1,47 @@
+{% load static %}
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{% block title %}Wallpapers App{% endblock %}</title>
+        <link
+            href="{% static 'fontawesomefree/css/fontawesome.css' %}"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="{% static 'fontawesomefree/css/brands.css' %}"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="{% static 'fontawesomefree/css/solid.css' %}"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <link rel="stylesheet" href="{% static 'css/output.css' %}" />
+    </head>
+    <body>
+        <nav>
+            <h1>Navbar</h1>
+            <div>
+                <ul>
+                    <li><a href="/home">Home</a></li>
+                </ul>
+            </div>
+            <div>
+                <ul>
+                    {% if user.is_authenticated %}
+                    <span>{{user.username}} | </span>
+                    <li><a href="/logout">Cerrar sesión</a></li>
+                    {% else %}
+                    <li><a href="/login">Iniciar sesión</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+        <main>{% block content %}{% endblock %}</main>
+    </body>
+</html>

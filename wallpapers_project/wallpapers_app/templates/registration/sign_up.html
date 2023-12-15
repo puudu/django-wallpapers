@@ -1,0 +1,8 @@
+{% extends "main/base.html" %} {% block title %}Registrate{% endblock %} 
+{% load tailwind_filters %} {% block content %}
+<form method="post">
+    {% csrf_token %}{{form|crispy}}
+    <p>¿Ya tienes una cuenta? <a href="/sign-up">Inicia sesión</a></p>
+    <button type="submit">Registrarse</button>
+</form>
+{% endblock %}
