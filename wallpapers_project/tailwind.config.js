@@ -1,7 +1,16 @@
+/** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./src/**/*.{html,js}"],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
+    content: ["./wallpapers_app/templates/**/*.html"],
+    theme: {
+        extend: {
+            colors: {
+                "custom-dark-cyan-2": "#388087",
+                "custom-dark-cyan-1": "#6FB2B8",
+                "custom-cyan": "#BADFE7",
+                "custom-green": "#C2EDCF",
+                "custom-white": "#F6F7F2",
+            },
+        },
+    },
+    plugins: [],
 };

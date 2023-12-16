@@ -23,27 +23,52 @@
         />
         <link rel="stylesheet" href="{% static 'css/output.css' %}" />
     </head>
-    <body>
-        <nav>
-            <h1>Navbar</h1>
-            <div>
-                <ul>
-                    <li><a href="/home">Home</a></li>
-                    <li><a href="/create-contribution">Crear aporte</a></li>
+    <body class="bg-custom-white">
+        <nav class="mx-1 my-3 flex justify-between">
+            <div class="flex items-end justify-start">
+                <h1 class="text-custom-dark-cyan-2 text-xl font-extrabold">
+                    Wallpapers APP
+                </h1>
+                <ul class="mx-2 flex justify-start">
+                    <li>
+                        <a
+                            class="text-custom-dark-cyan-2 hover:bg-custom-dark-cyan-2 hover:text-custom-white mx-1 rounded-md p-1.5"
+                            href="/home"
+                            >Inicio</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            class="text-custom-dark-cyan-2 hover:bg-custom-dark-cyan-2 hover:text-custom-white mx-1 rounded-md p-1.5"
+                            href="/create-contribution"
+                            >Crear aporte</a
+                        >
+                    </li>
                 </ul>
             </div>
-            <div>
-                <ul>
+            <div class="flex items-end justify-end">
+                <ul class="flex items-end justify-end">
                     {% if user.is_authenticated %}
                     <span>{{user.username}} | </span>
                     <li>
                         <form action="{% url 'logout' %}" method="post">
                             {% csrf_token %}
-                            <button type="submit">Cerrar sesión</button>
+                            <button
+                                type="submit"
+                                class="text-custom-dark-cyan-2 hover:bg-custom-dark-cyan-2 hover:text-custom-white mx-1 rounded-md px-1.5"
+                            >
+                                Cerrar sesión
+                            </button>
                         </form>
                     </li>
                     {% else %}
-                    <li><a href="/login">Iniciar sesión</a></li>
+                    <li>
+                        <a
+                            href="/login"
+                            class="text-custom-dark-cyan-2 hover:bg-custom-dark-cyan-2 hover:text-custom-white mx-1 rounded-md px-1.5"
+                            >Iniciar sesión</a
+                        >
+                    </li>
                     {% endif %}
                 </ul>
             </div>
