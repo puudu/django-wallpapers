@@ -29,13 +29,19 @@
             <div>
                 <ul>
                     <li><a href="/home">Home</a></li>
+                    <li><a href="/create-contribution">Crear aporte</a></li>
                 </ul>
             </div>
             <div>
                 <ul>
                     {% if user.is_authenticated %}
                     <span>{{user.username}} | </span>
-                    <li><a href="/logout">Cerrar sesión</a></li>
+                    <li>
+                        <form action="{% url 'logout' %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit">Cerrar sesión</button>
+                        </form>
+                    </li>
                     {% else %}
                     <li><a href="/login">Iniciar sesión</a></li>
                     {% endif %}
