@@ -14,3 +14,9 @@ class WallpaperForm(forms.ModelForm):
     class Meta:
         model = Wallpaper
         fields = ["title", "img", "category", "screen_type"]
+        labels = {
+            'title': 'Título',
+            'img': 'Imagen',
+            'category': 'Categoría',
+            'screen_type': 'Tipo de pantalla',
+        }

@@ -1,0 +1,12 @@
+
+{% extends "main/base.html" %}
+{% block title %} Home Page {% endblock %} 
+{% block content %}
+<div class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 mx-3 justify-items-center">
+    {% for wallpaper in wallpaper_list %}
+    <div class="rounded-sm h-44 w-80 group relative cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30">
+        <img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-125" src="{{ wallpaper.img.url }}" alt="">
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

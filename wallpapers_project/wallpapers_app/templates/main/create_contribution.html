@@ -1,9 +1,22 @@
-{% extends "main/base.html" %} {% block title %}Crear un aporte{% endblock %}
+{% extends "main/base.html" %} {% block title %}Crear un aporte{% endblock %} 
 {% load tailwind_filters %} {% block content %}
-<form method="post" class="px-4" >
-    <h1 class="text-center text-xl">Ingresa los datos para enviar tu aporte</h1>
-    {% csrf_token %}{{form|crispy}}
-    <button type="submit" class="border-custom-dark-cyan-2 hover:bg-custom-dark-cyan-2 text-custom-dark-cyan-2 hover:text-custom-white mx-auto rounded-md border-2 p-1.5 w-full mb-3" >Enviar aporte</button>
-    <p class="text-center text-sm">Nota: Los aportes que envíes se visualizarán en la página una vez sean aprobados por un administrador.</p>
-</form>
+<div class="px-4">
+    <form method="post" enctype="multipart/form-data">
+        <h1 class="text-center text-xl">
+            Ingresa los datos para enviar tu aporte
+        </h1>
+        {% csrf_token %}{{form|crispy}}
+        <p class="text-center text-sm">
+            Nota: Los aportes que envíes se visualizarán en la página una vez
+            sean aprobados por un administrador.
+        </p>
+        <button
+            type="submit"
+            class="mx-auto mb-3 w-full rounded-md border-2 border-custom-dark-cyan-2 p-1.5 text-custom-dark-cyan-2 hover:bg-custom-dark-cyan-2 hover:text-custom-white"
+        >
+            Enviar aporte
+        </button>
+    </form>
+</div>
+
 {% endblock %}

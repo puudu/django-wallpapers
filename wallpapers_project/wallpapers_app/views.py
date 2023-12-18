@@ -2,15 +2,21 @@ from django.shortcuts import render, redirect
 from .forms import RegisterForm, WallpaperForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
+from .models import Wallpaper
 
 # Create your views here.
 def home(request):
     return render(request, 'main/home.html')
 
+def wallpaper_list(request):
+    wallpaper_list = Wallpaper.objects.all()
+
+    return render(request, 'main/wallpaper_list.html', {'wallpaper_list': wallpaper_list})
+
 @login_required(login_url="/login")
 def create_contribution(request):
     if request.method == 'POST':
-        form = WallpaperForm(request.POST)
+        form = WallpaperForm(request.POST, request.FILES)
         if form.is_valid():
             wallpaper = form.save(commit=False)
             wallpaper.author = request.user
