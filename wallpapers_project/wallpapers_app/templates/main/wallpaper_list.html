@@ -1,6 +1,6 @@
 {% extends "main/base.html" %} {% block title %} Explorar {% endblock %} 
 {% block content %}
-<div class="flex">
+<div class="md:flex">
     <div class="flex-1">
         <div
             class="mx-3 grid grid-cols-1 justify-items-center gap-5 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
@@ -92,15 +92,55 @@
                 </button>
             </div>
         </form>
+        <div class="my-2 flex justify-center">
+            <label class="text-sm mr-1">Ordenar por:</label>
+            <select class="rounded-md border border-gray-100" name="order_by" id="order_by">
+                <option value="-created_at" {% if request.GET.order_by == '-created_at' %}selected{% endif %}>Más recientes</option>
+                <option value="created_at" {% if request.GET.order_by == 'created_at' %}selected{% endif %}>Más antiguos</option>
+                <option value="-download_count" {% if request.GET.order_by == '-download_count' %}selected{% endif %}>Nº descargas</option>
+            </select>
+        </div>
         <div class="my-1.5 grid grid-cols-1">
+            <a
+                href="{% url 'wallpaper_list' %}"
+                class="category-link rounded-sm px-1.5 py-0.5 text-custom-dark-cyan-1 hover:bg-custom-dark-cyan-1 hover:text-custom-white"
+                data-category-id={{0}}
+                >Todos</a
+            >
             {% for category in categories %}
             <a
-                href=""
-                class="rounded-sm px-1.5 py-0.5 text-custom-dark-cyan-1 hover:bg-custom-dark-cyan-1 hover:text-custom-white"
+                href="{% url 'wallpaper_list' %}?category={{category.id}}"
+                class="category-link rounded-sm px-1.5 py-0.5 text-custom-dark-cyan-1 hover:bg-custom-dark-cyan-1 hover:text-custom-white"
+                data-category-id={{category.id}}
                 >{{category.name}} ({{category.wallpaper_count}})</a
             >
             {% endfor %}
         </div>
     </aside>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Obtén referencia al elemento select
+        var orderSelect = document.getElementById("order_by");
+
+        // Agrega un evento de cambio al select
+        orderSelect.addEventListener("change", function () {
+            // Obtiene el valor seleccionado
+            var selectedOrder = orderSelect.value;
+
+            // Modifica los enlaces para incluir el nuevo parámetro
+            var links = document.querySelectorAll(".category-link");
+            links.forEach(function (link) {
+                var categoryId = link.getAttribute("data-category-id");
+                if (categoryId == 0) {    
+                    link.href = "{% url 'wallpaper_list' %}?order_by=" + selectedOrder;
+                    return;
+                }
+                
+                link.href = "{% url 'wallpaper_list' %}?category=" + categoryId + "&order_by=" + selectedOrder;
+            });
+        });
+    });
+</script>
+
 {% endblock %}

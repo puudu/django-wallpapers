@@ -13,11 +13,18 @@ def home(request):
     return render(request, 'main/home.html')
 
 def wallpaper_list(request):
-    wallpaper_list = Wallpaper.objects.all().order_by('title')
+    category_id = request.GET.get('category', 0)
+    order_by = request.GET.get('order_by', '-created_at')
+
+    wallpaper_list = Wallpaper.objects.all().order_by(order_by)
+
+    if category_id != 0:
+        wallpaper_list = wallpaper_list.filter(category__id=category_id)
+
     category_list = Category.objects.all().order_by('name')
 
     # Set up Pagination
-    p = Paginator(wallpaper_list, 4)
+    p = Paginator(wallpaper_list, 20)
     page = request.GET.get('page')
     wallpapers = p.get_page(page)
 
