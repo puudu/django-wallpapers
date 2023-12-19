@@ -2,16 +2,26 @@ from django.shortcuts import render, redirect
 from .forms import RegisterForm, WallpaperForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
-from .models import Wallpaper
+from .models import Wallpaper, Category
+
+# Pagination
+from django.core.paginator import Paginator
+
 
 # Create your views here.
 def home(request):
     return render(request, 'main/home.html')
 
 def wallpaper_list(request):
-    wallpaper_list = Wallpaper.objects.all()
+    wallpaper_list = Wallpaper.objects.all().order_by('title')
+    category_list = Category.objects.all().order_by('name')
 
-    return render(request, 'main/wallpaper_list.html', {'wallpaper_list': wallpaper_list})
+    # Set up Pagination
+    p = Paginator(wallpaper_list, 4)
+    page = request.GET.get('page')
+    wallpapers = p.get_page(page)
+
+    return render(request, 'main/wallpaper_list.html', {'wallpapers': wallpapers, 'categories': category_list})
 
 @login_required(login_url="/login")
 def create_contribution(request):

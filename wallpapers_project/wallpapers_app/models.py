@@ -8,6 +8,9 @@ class Category (models.Model):
 
     def __str__(self):
         return self.name
+    
+    def wallpaper_count(self):
+        return self.wallpaper_set.count()
 
 class ScreenType (models.Model):
     name = models.CharField(max_length=20, unique=True)

@@ -1,12 +1,106 @@
-
-{% extends "main/base.html" %}
-{% block title %} Home Page {% endblock %} 
+{% extends "main/base.html" %} {% block title %} Explorar {% endblock %} 
 {% block content %}
-<div class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 mx-3 justify-items-center">
-    {% for wallpaper in wallpaper_list %}
-    <div class="rounded-sm h-44 w-80 group relative cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30">
-        <img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-125" src="{{ wallpaper.img.url }}" alt="">
+<div class="flex">
+    <div class="flex-1">
+        <div
+            class="mx-3 grid grid-cols-1 justify-items-center gap-5 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
+        >
+            {% for wallpaper in wallpapers %}
+            <div
+                class="group relative aspect-video cursor-pointer items-center justify-center overflow-hidden rounded-sm transition-shadow hover:shadow-xl hover:shadow-black/30"
+            >
+                <img
+                    class="aspect-video object-cover transition-transform duration-500 group-hover:scale-125"
+                    src="{{ wallpaper.img.url }}"
+                    alt=""
+                />
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="my-3 flex justify-center">
+            {% if wallpapers.has_previous %}
+            <a
+                class="mx-2 flex h-8 w-8 items-center justify-center rounded-full text-custom-dark-cyan-2 hover:bg-custom-cyan"
+                href="?page=1"
+                ><i class="fa-solid fa-angles-left"></i
+            ></a>
+            <a
+                class="mx-2 flex h-8 w-8 items-center justify-center rounded-full text-custom-dark-cyan-2 hover:bg-custom-cyan"
+                href="?page={{ wallpapers.previous_page_number }}"
+                ><i class="fa-solid fa-chevron-left"></i
+            ></a>
+            {% endif %}
+            <p
+                class="mx-2 flex items-center justify-center text-custom-dark-cyan-2"
+            >
+                Página {{ wallpapers.number }} de {{ wallpapers.paginator.num_pages }}
+            </p>
+            {% if wallpapers.has_next %}
+            <a
+                class="mx-2 flex h-8 w-8 items-center justify-center rounded-full text-custom-dark-cyan-2 hover:bg-custom-cyan"
+                href="?page={{ wallpapers.next_page_number }}"
+                ><i class="fa-solid fa-angle-right"></i
+            ></a>
+            <a
+                class="mx-2 flex h-8 w-8 items-center justify-center rounded-full text-custom-dark-cyan-2 hover:bg-custom-cyan"
+                href="?page={{ wallpapers.paginator.num_pages }}"
+                ><i class="fa-solid fa-angles-right"></i
+            ></a>
+            {% endif %}
+        </div>
     </div>
-    {% endfor %}
+    <aside class="m-2">
+        <form>
+            <label
+                for="default-search"
+                class="sr-only mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >Search</label
+            >
+            <div class="relative">
+                <div
+                    class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3"
+                >
+                    <svg
+                        class="h-4 w-4 text-gray-500 dark:text-gray-400"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 20 20"
+                    >
+                        <path
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                        />
+                    </svg>
+                </div>
+                <input
+                    type="search"
+                    id="default-search"
+                    class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-4 ps-10 text-sm text-custom-dark-cyan-2 focus:border-custom-cyan focus:ring-custom-cyan"
+                    placeholder="Buscar..."
+                    required
+                />
+                <button
+                    type="submit"
+                    class="absolute bottom-2.5 end-2.5 rounded-lg bg-custom-dark-cyan-2 px-4 py-2 text-sm font-medium text-white hover:bg-custom-dark-cyan-1 focus:outline-none focus:ring-4 focus:ring-custom-cyan"
+                >
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
+        </form>
+        <div class="my-1.5 grid grid-cols-1">
+            {% for category in categories %}
+            <a
+                href=""
+                class="rounded-sm px-1.5 py-0.5 text-custom-dark-cyan-1 hover:bg-custom-dark-cyan-1 hover:text-custom-white"
+                >{{category.name}} ({{category.wallpaper_count}})</a
+            >
+            {% endfor %}
+        </div>
+    </aside>
 </div>
 {% endblock %}
