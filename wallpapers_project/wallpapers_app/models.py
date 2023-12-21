@@ -37,3 +37,11 @@ class Wallpaper (models.Model):
     
     def __str__(self):
         return self.title
+    
+class Comment(models.Model):
+    wallpaper = models.ForeignKey(Wallpaper, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    text = models.TextField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Wallpaper
+from .models import Wallpaper, Comment
 
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -20,3 +20,9 @@ class WallpaperForm(forms.ModelForm):
             'category': 'Categoría',
             'screen_type': 'Tipo de pantalla',
         }
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ["text"]
+        labels = {'text': 'Escribe un comentario'}

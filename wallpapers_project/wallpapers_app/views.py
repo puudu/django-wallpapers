@@ -1,14 +1,12 @@
 from django.shortcuts import render, redirect
-from .forms import RegisterForm, WallpaperForm
+from .forms import RegisterForm, WallpaperForm, CommentForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
-from .models import Wallpaper, Category
+from .models import Wallpaper, Category, Comment
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
-
 # Pagination
 from django.core.paginator import Paginator
-
 
 # Create your views here.
 def home(request):
@@ -34,8 +32,20 @@ def wallpaper_list(request):
 
 def wallpaper(request, id):
     item = Wallpaper.objects.get(id=id)
+    comments = Comment.objects.all().filter(wallpaper=item)
 
-    return render(request, 'main/wallpaper_item.html',{'item':item})
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.wallpaper = item
+            comment.author = request.user
+            comment.save()
+            return redirect("/wallpaper/" + str(item.id))
+    else:
+        form = CommentForm()
+
+    return render(request, 'main/wallpaper_item.html',{'item':item, 'comments':comments, "form": form})
 
 def increment_download_count(request, wallpaper_id):
     wallpaper = get_object_or_404(Wallpaper, pk=wallpaper_id)
@@ -57,6 +67,22 @@ def create_contribution(request):
             return redirect("/home")
     else:
         form = WallpaperForm()
+
+    return render(request, 'main/create_contribution.html', {"form": form})
+
+@login_required(login_url="/login")
+def create_comment(request, id):
+    wallpaper = get_object_or_404(Wallpaper, id=id)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.wallpaper = wallpaper
+            comment.author = request.user
+            comment.save()
+            return redirect("/wallpaper/" + wallpaper.id)
+    else:
+        form = CommentForm()
 
     return render(request, 'main/create_contribution.html', {"form": form})
 

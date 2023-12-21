@@ -1,4 +1,6 @@
 {% extends "main/base.html" %} {% block title %} Explorar {% endblock %} 
+{% load tailwind_filters %} 
+{% load static %}
 {% block content %}
 <div class="mx-2">
     <div class="flex justify-center">
@@ -13,6 +15,37 @@
     <h3 class="text-md"><i class="fa-solid fa-user"></i> Aporte de {{item.author}}</h3>
     <h3 class="text-md"><i class="fa-solid fa-calendar-days"></i> Publicado el {{item.created_at}}</h3>
 
+    <h2 class="text-lg font-bold mt-2">Comentarios</h2>
+    <form method="post" class="px-2">
+        {% csrf_token %}{{form|crispy}}
+        <div class="flex justify-end px-2">
+            <button
+                type="submit"
+                class="ml-2 flex items-center justify-between rounded border-2 border-custom-dark-cyan-2 px-4 py-2 text-sm font-bold text-custom-dark-cyan-2 hover:bg-custom-dark-cyan-2 hover:text-custom-white"
+            >
+                Comentar
+            </button>
+        </div>
+    </form>
+
+    {% for comment in comments %}
+    <div>
+        <div class="flex">
+            <img
+                src="{% static 'img/user.jpg' %}"
+                width=38
+                height=38
+                alt="Imagen de perfil"
+                class="rounded-full object-cover"
+            />
+            <div class="ml-1.5">
+                <p class="text-sm">{{comment.author}}</p>
+                <p class="text-xs">{{comment.created_at}}</p>
+            </div>
+        </div>
+        <p class="p-1 text-sm">{{comment.text}}</p>
+    </div>
+    {% endfor %}
 </div>
 <script>
     document.getElementById('downloadBtn').addEventListener('click', function() {
