@@ -1,0 +1,25 @@
+{% extends "main/base.html" %} {% block title %} Explorar {% endblock %} 
+{% block content %}
+<div class="mx-2">
+    <div class="flex justify-center">
+        <img class="rounded-sm" src={{item.img.url}} alt="">
+    </div>
+    <h2 class="text-xl font-bold">{{item.title}}</h2>
+    <div class="flex justify-center my-2">
+        <a href="{{item.img.url}}" download id="downloadBtn" class="border border-custom-dark-cyan-2 hover:bg-custom-dark-cyan-2 text-custom-dark-cyan-2 hover:text-custom-white p-1.5 rounded-md"><i class="fa-solid fa-download"></i> Descargar</a>
+    </div>
+    <h3 class="text-md"><i class="fa-solid fa-download"></i> {{ item.download_count }} descargas</h3>
+    <h3 class="text-md"><i class="fa-solid fa-list"></i> Categoria:  <a class="text-custom-dark-cyan-2 hover:underline" href="/wallpaper-list?category={{item.category.id}}">{{item.category.name}}</a></h3>
+    <h3 class="text-md"><i class="fa-solid fa-user"></i> Aporte de {{item.author}}</h3>
+    <h3 class="text-md"><i class="fa-solid fa-calendar-days"></i> Publicado el {{item.created_at}}</h3>
+
+</div>
+<script>
+    document.getElementById('downloadBtn').addEventListener('click', function() {
+        // Aquí puedes realizar una solicitud AJAX a tu punto final de Django para incrementar el contador
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/increment_download_count/{{ item.id }}/', true);
+        xhr.send();
+    });
+    </script>
+{% endblock %}

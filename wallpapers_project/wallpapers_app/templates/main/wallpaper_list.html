@@ -9,11 +9,13 @@
             <div
                 class="group relative aspect-video cursor-pointer items-center justify-center overflow-hidden rounded-sm transition-shadow hover:shadow-xl hover:shadow-black/30"
             >
-                <img
+                <a href="/wallpaper/{{wallpaper.id}}">
+                    <img
                     class="aspect-video object-cover transition-transform duration-500 group-hover:scale-125"
                     src="{{ wallpaper.img.url }}"
                     alt=""
-                />
+                    />
+                </a>
             </div>
             {% endfor %}
         </div>

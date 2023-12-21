@@ -3,6 +3,8 @@ from .forms import RegisterForm, WallpaperForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from .models import Wallpaper, Category
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponse
 
 # Pagination
 from django.core.paginator import Paginator
@@ -29,6 +31,18 @@ def wallpaper_list(request):
     wallpapers = p.get_page(page)
 
     return render(request, 'main/wallpaper_list.html', {'wallpapers': wallpapers, 'categories': category_list})
+
+def wallpaper(request, id):
+    item = Wallpaper.objects.get(id=id)
+
+    return render(request, 'main/wallpaper_item.html',{'item':item})
+
+def increment_download_count(request, wallpaper_id):
+    wallpaper = get_object_or_404(Wallpaper, pk=wallpaper_id)
+    wallpaper.increment_download_count()
+    wallpaper.save()
+    print('download count incremented')
+    return HttpResponse('')
 
 @login_required(login_url="/login")
 def create_contribution(request):
