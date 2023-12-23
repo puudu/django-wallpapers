@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "crispy_tailwind",
     'fontawesomefree',
     'wallpapers_app',
+    'wallpapers_admin',
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"

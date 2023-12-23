@@ -1,6 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-    content: ["./wallpapers_app/templates/**/*.html"],
+    content: [
+        "./wallpapers_app/templates/**/*.html",
+        "./wallpapers_admin/templates/*.html",
+],
     theme: {
         extend: {
             colors: {

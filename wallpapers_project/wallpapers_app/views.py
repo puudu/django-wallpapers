@@ -10,13 +10,16 @@ from django.core.paginator import Paginator
 
 # Create your views here.
 def home(request):
-    return render(request, 'main/home.html')
+    latest = Wallpaper.objects.all().filter(published=True).order_by('-created_at')[:12]
+    popular = Wallpaper.objects.all().filter(published=True).order_by('-download_count')[:12]
+
+    return render(request, 'main/home.html', {'latest': latest, 'popular':popular})
 
 def wallpaper_list(request):
     category_id = request.GET.get('category', 0)
     order_by = request.GET.get('order_by', '-created_at')
 
-    wallpaper_list = Wallpaper.objects.all().order_by(order_by)
+    wallpaper_list = Wallpaper.objects.all().filter(published=True).order_by(order_by)
 
     if category_id != 0:
         wallpaper_list = wallpaper_list.filter(category__id=category_id)

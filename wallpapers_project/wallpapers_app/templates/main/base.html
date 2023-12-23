@@ -51,6 +51,16 @@
                             >Crear aporte</a
                         >
                     </li>
+                    {% if user.is_staff %}
+                    <li>
+                        <a
+                            class="text-custom-dark-cyan-2 hover:bg-custom-dark-cyan-2 hover:text-custom-white mx-1 rounded-sm p-1.5"
+                            href="/admin-wallpapers/contributions"
+                            >Administrar aportes
+                        </a>
+                    </li>
+                    {% endif %}
+
                 </ul>
             </div>
             <div class="flex items-end justify-end">

@@ -1,8 +1,8 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from PIL import Image
 
-# Create your models here.
 class Category (models.Model):
     name = models.CharField(max_length=20, unique=True)
 
@@ -10,7 +10,7 @@ class Category (models.Model):
         return self.name
     
     def wallpaper_count(self):
-        return self.wallpaper_set.count()
+        return self.wallpaper_set.filter(published=True).count()
 
 class ScreenType (models.Model):
     name = models.CharField(max_length=20, unique=True)
@@ -34,6 +34,16 @@ class Wallpaper (models.Model):
     def increment_download_count(self):
         """ Increments download_count of an instance by 1"""
         self.download_count += 1
+        
+    def get_image_resolution(self):
+        if self.img:
+            image = Image.open(self.img.path)
+            
+            width, height = image.size
+            
+            return f"{width}x{height}px"
+        else:
+            return "N/A"
     
     def __str__(self):
         return self.title

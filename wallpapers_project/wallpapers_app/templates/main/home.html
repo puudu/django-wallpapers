@@ -1,5 +1,48 @@
-{% extends "main/base.html" %} 
-{% block title %} Home Page {% endblock %} 
-{% block content %}
-<h1 class='bg-black text-white'>HomePage</h1>
-{% endblock %}
+{% extends "main/base.html" %} {% block title %} Inicio {% endblock %} {% block content %}
+<div>
+    <h2 class="text-center text-lg font-bold text-custom-dark-cyan-2 border-b-2 border-custom-dark-cyan-2 m-2 rounded-sm">ÚLTIMOS APORTES</h2>
+    <div
+        class="mx-3 grid grid-cols-1 justify-items-center gap-5 md:grid-cols-2 lg:grid-cols-4"
+    >
+        {% for wallpaper in latest %}
+        <div
+            class="group relative aspect-video cursor-pointer items-center justify-center overflow-hidden rounded-sm transition-shadow hover:shadow-xl hover:shadow-black/30"
+        >
+            <a href="/wallpaper/{{wallpaper.id}}">
+                <img
+                    class="aspect-video object-cover transition-transform duration-500 group-hover:scale-125"
+                    src="{{ wallpaper.img.url }}"
+                    alt=""
+                />
+            </a>
+        </div>
+        {% endfor %}
+
+    </div>
+    <div class="flex justify-end mx-3">
+        <a href="/wallpaper-list" class="rounded-sm text-custom-dark-cyan-2 border-b-2 border-custom-dark-cyan-2 hover:text-custom-white hover:bg-custom-dark-cyan-2 p-1.5">Ver más <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+    <h2 class="text-center text-lg font-bold text-custom-dark-cyan-2 border-b-2 border-custom-dark-cyan-2 m-2 rounded-sm">TOP DESCARGAS</h2>
+    <div
+        class="mx-3 grid grid-cols-1 justify-items-center gap-5 md:grid-cols-2 lg:grid-cols-4"
+    >
+        {% for wallpaper in popular %}
+        <div
+            class="group relative aspect-video cursor-pointer items-center justify-center overflow-hidden rounded-sm transition-shadow hover:shadow-xl hover:shadow-black/30"
+        >
+            <a href="/wallpaper/{{wallpaper.id}}">
+                <img
+                    class="aspect-video object-cover transition-transform duration-500 group-hover:scale-125"
+                    src="{{ wallpaper.img.url }}"
+                    alt=""
+                />
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="flex justify-end mx-3">
+        <a href="/wallpaper-list?order_by=-download_count" class="rounded-sm text-custom-dark-cyan-2 border-b-2 border-custom-dark-cyan-2 hover:text-custom-white hover:bg-custom-dark-cyan-2 p-1.5">Ver más <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+    {% endblock %}
+</div>

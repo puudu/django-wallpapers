@@ -11,11 +11,14 @@
         <a href="{{item.img.url}}" download id="downloadBtn" class="border border-custom-dark-cyan-2 hover:bg-custom-dark-cyan-2 text-custom-dark-cyan-2 hover:text-custom-white p-1.5 rounded-md"><i class="fa-solid fa-download"></i> Descargar</a>
     </div>
     <h3 class="text-md"><i class="fa-solid fa-download"></i> {{ item.download_count }} descargas</h3>
-    <h3 class="text-md"><i class="fa-solid fa-list"></i> Categoria:  <a class="text-custom-dark-cyan-2 hover:underline" href="/wallpaper-list?category={{item.category.id}}">{{item.category.name}}</a></h3>
+    <h3 class="text-md"><i class="fa-solid fa-image"></i> Resolución: {{item.get_image_resolution}}</h3>
+    <h3 class="text-md"><i class="fa-solid fa-list"></i> Categoría:  <a class="text-custom-dark-cyan-2 hover:underline" href="/wallpaper-list?category={{item.category.id}}">{{item.category.name}}</a></h3>
     <h3 class="text-md"><i class="fa-solid fa-user"></i> Aporte de {{item.author}}</h3>
     <h3 class="text-md"><i class="fa-solid fa-calendar-days"></i> Publicado el {{item.created_at}}</h3>
 
     <h2 class="text-lg font-bold mt-2">Comentarios</h2>
+    
+    {% if user.is_authenticated %}
     <form method="post" class="px-2">
         {% csrf_token %}{{form|crispy}}
         <div class="flex justify-end px-2">
@@ -27,25 +30,30 @@
             </button>
         </div>
     </form>
+    {% endif %}
 
-    {% for comment in comments %}
-    <div>
-        <div class="flex">
-            <img
-                src="{% static 'img/user.jpg' %}"
-                width=38
-                height=38
-                alt="Imagen de perfil"
-                class="rounded-full object-cover"
-            />
-            <div class="ml-1.5">
-                <p class="text-sm">{{comment.author}}</p>
-                <p class="text-xs">{{comment.created_at}}</p>
+    {% if comments.count > 0%}
+        {% for comment in comments %}
+        <div>
+            <div class="flex">
+                <img
+                    src="{% static 'img/user.jpg' %}"
+                    width=38
+                    height=38
+                    alt="Imagen de perfil"
+                    class="rounded-full object-cover"
+                />
+                <div class="ml-1.5">
+                    <p class="text-sm">{{comment.author}}</p>
+                    <p class="text-xs">{{comment.created_at}}</p>
+                </div>
             </div>
+            <p class="p-1 text-sm">{{comment.text}}</p>
         </div>
-        <p class="p-1 text-sm">{{comment.text}}</p>
-    </div>
-    {% endfor %}
+        {% endfor %}
+    {% else %}
+        <p class="py-8 text-center">No hay comentarios</p>
+    {% endif %}
 </div>
 <script>
     document.getElementById('downloadBtn').addEventListener('click', function() {

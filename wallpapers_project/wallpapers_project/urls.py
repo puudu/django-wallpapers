@@ -22,6 +22,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('wallpapers_app.urls')),
+    path('admin-wallpapers/', include('wallpapers_admin.urls')),
     path('', include('django.contrib.auth.urls')),
 ]
 

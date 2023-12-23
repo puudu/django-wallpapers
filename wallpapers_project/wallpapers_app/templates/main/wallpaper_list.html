@@ -2,24 +2,32 @@
 {% block content %}
 <div class="md:flex">
     <div class="flex-1">
+        
+        {% if wallpapers|length <= 0 %}
+        
+        <p class="text-center my-2">No ha resultados</p>
+        {% else %}
         <div
             class="mx-3 grid grid-cols-1 justify-items-center gap-5 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
         >
-            {% for wallpaper in wallpapers %}
-            <div
-                class="group relative aspect-video cursor-pointer items-center justify-center overflow-hidden rounded-sm transition-shadow hover:shadow-xl hover:shadow-black/30"
-            >
-                <a href="/wallpaper/{{wallpaper.id}}">
-                    <img
-                    class="aspect-video object-cover transition-transform duration-500 group-hover:scale-125"
-                    src="{{ wallpaper.img.url }}"
-                    alt=""
-                    />
-                </a>
-            </div>
-            {% endfor %}
+                {% for wallpaper in wallpapers %}
+                <div
+                    class="group relative aspect-video cursor-pointer items-center justify-center overflow-hidden rounded-sm transition-shadow hover:shadow-xl hover:shadow-black/30"
+                >
+                    <a href="/wallpaper/{{wallpaper.id}}">
+                        <img
+                        class="aspect-video object-cover transition-transform duration-500 group-hover:scale-125"
+                        src="{{ wallpaper.img.url }}"
+                        alt=""
+                        />
+                    </a>
+                </div>
+                {% endfor %}
+
+            
         </div>
 
+        {% endif %}
         <div class="my-3 flex justify-center">
             {% if wallpapers.has_previous %}
             <a

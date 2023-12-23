@@ -1,0 +1,101 @@
+{% extends "main/base.html" %} {% block title %} Administrar aportes {% endblock %} {% block content %}
+<div class="m-2">
+    <h1 class="text-center text-xl font-bold uppercase text-custom-dark-cyan-2 border-custom-dark-cyan-2 border-b-2">Administrar aportes</h1>
+    <div class="grid gap-2  grid-cols-3 my-2">
+        <h3 class="text-center"><i class="fa-solid fa-question"></i> {{to_approve_count}} por revisar</h3>
+        <h3 class="text-center"><i class="fa-solid fa-check"></i> {{approved_count}} aprobados</h3>
+        <h3 class="text-center"><i class="fa-solid fa-database"></i> {{total_count}} totales</h3>
+    </div>
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
+        <thead class="text-xs text-custom-white uppercase bg-custom-dark-cyan-1 rounded-lg">
+            <tr>
+                <th scope="col" class="px-6 py-3">Titulo</th>
+                <th scope="col" class="px-6 py-3">Imagen</th>
+                <th scope="col" class="px-6 py-3">Resolución</th>
+                <th scope="col" class="px-6 py-3">Usuario</th>
+                <th scope="col" class="px-6 py-3">Fecha</th>
+                <th scope="col" class="px-6 py-3">Categoria</th>
+                <th scope="col" class="px-6 py-3">Pantalla</th>
+                <th scope="col" class="px-6 py-3">Aprobación</th>
+                <th scope="col" class="px-6 py-3">Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for wallpaper in wallpapers %}
+            <tr class="border-b">
+                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">{{wallpaper.title}}</th>
+                <th><a href="{{wallpaper.img.url}}"><img src="{{wallpaper.img.url}}" alt="" width="200"></a></th>
+                <th>{{wallpaper.get_image_resolution}}</th>
+                <th>{{wallpaper.author}}</th>
+                <th>{{wallpaper.created_at}}</th>
+                <th>{{wallpaper.category}}</th>
+                <th>{{wallpaper.screen_type}}</th>
+                <th>{% if wallpaper.published %}
+                    <p class="font-bold text-custom-dark-cyan-1 text-center"><i class="fa-solid fa-check"></i> Aprobado</p>
+                    {% else %}
+                    <div class="grid gap-2 grid-cols-2 mx-2">
+
+                        <form method="post" action="{% url 'contributions' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="wallpaper_id" value="{{ wallpaper.id }}">
+                            <input type="hidden" name="published" value="True">
+                            <button class="rounded-md bg-custom-dark-cyan-1 text-custom-white p-1.5 hover:bg-custom-cyan w-full" type="submit"><i class="fa-solid fa-check"></i></button>
+                        </form>
+
+                        <form method="post" action="{% url 'contributions' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="wallpaper_id" value="{{ wallpaper.id }}">
+                            <input type="hidden" name="published" value="False">
+                            <button class="rounded-md bg-red-400 text-custom-white p-1.5 hover:bg-red-200 w-full" type="submit"><i class="fa-solid fa-xmark"></i></button>
+                        </form>
+                    </div>
+                    {% endif %}
+                </th>
+                <th>
+                    <div class="flex justify-center">
+                        <form method="post" action="{% url 'contributions' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="wallpaper_id" value="{{ wallpaper.id }}">
+                            <input type="hidden" name="published" value="False">
+                            <button class="rounded-md bg-red-400 text-custom-white p-2.5 hover:bg-red-200" type="submit"><i class="fa-solid fa-trash"></i></button>
+                        </form>
+                    </div>
+                </th>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <div class="my-3 flex justify-center">
+        {% if wallpapers.has_previous %}
+        <a
+            class="mx-2 flex h-8 w-8 items-center justify-center rounded-full text-custom-dark-cyan-2 hover:bg-custom-cyan"
+            href="?page=1"
+            ><i class="fa-solid fa-angles-left"></i
+        ></a>
+        <a
+            class="mx-2 flex h-8 w-8 items-center justify-center rounded-full text-custom-dark-cyan-2 hover:bg-custom-cyan"
+            href="?page={{ wallpapers.previous_page_number }}"
+            ><i class="fa-solid fa-chevron-left"></i
+        ></a>
+        {% endif %}
+        <p
+            class="mx-2 flex items-center justify-center text-custom-dark-cyan-2"
+        >
+            Página {{ wallpapers.number }} de {{ wallpapers.paginator.num_pages }}
+        </p>
+        {% if wallpapers.has_next %}
+        <a
+            class="mx-2 flex h-8 w-8 items-center justify-center rounded-full text-custom-dark-cyan-2 hover:bg-custom-cyan"
+            href="?page={{ wallpapers.next_page_number }}"
+            ><i class="fa-solid fa-angle-right"></i
+        ></a>
+        <a
+            class="mx-2 flex h-8 w-8 items-center justify-center rounded-full text-custom-dark-cyan-2 hover:bg-custom-cyan"
+            href="?page={{ wallpapers.paginator.num_pages }}"
+            ><i class="fa-solid fa-angles-right"></i
+        ></a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
