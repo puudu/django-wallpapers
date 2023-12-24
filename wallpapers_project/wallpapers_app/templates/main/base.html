@@ -90,6 +90,14 @@
                 </ul>
             </div>
         </nav>
+
+        {% if messages %}
+            {% for message in messages %}
+            <div class="bg-custom-cyan border border-custom-dark-cyan-1 rounded-md mx-3 my-1">
+                <p class="text-custom-dark-cyan-2 py-1 text-center"><i class="fa-solid fa-check"> </i> {{message}}</p>
+            </div>
+            {% endfor %}
+        {% endif %}
         <main>{% block content %}{% endblock %}</main>
     </body>
     <footer class="text-sm text-center my-4 text-custom-dark-cyan-2">Created with ♥ by puudu</footer>

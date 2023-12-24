@@ -7,6 +7,9 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseNotFound
 # Pagination
 from django.core.paginator import Paginator
+# Messages
+from django.contrib import messages
+
 
 # Create your views here.
 def home(request):
@@ -117,6 +120,7 @@ def create_contribution(request):
             wallpaper.published = False
             wallpaper.download_count = 0
             wallpaper.save()
+            messages.success(request, ('Muchas gracias! Hemos recibido su aporte :)'))
             return redirect("/home")
     else:
         form = WallpaperForm()
