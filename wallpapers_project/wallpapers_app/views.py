@@ -4,7 +4,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from .models import Wallpaper, Category, Comment
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 # Pagination
 from django.core.paginator import Paginator
 
@@ -32,6 +32,22 @@ def wallpaper_list(request):
     wallpapers = p.get_page(page)
 
     return render(request, 'main/wallpaper_list.html', {'wallpapers': wallpapers, 'categories': category_list})
+
+def wallpaper_list_search(request):
+    if request.method == "POST":
+        searched = request.POST['searched']
+
+        wallpaper_list = Wallpaper.objects.filter(title__icontains=searched).order_by('-created_at')
+        category_list = Category.objects.all().order_by('name')
+
+        # Set up Pagination
+        p = Paginator(wallpaper_list, 20)
+        page = request.GET.get('page')
+        wallpapers = p.get_page(page)
+
+        return render(request, 'main/wallpaper_list.html', {'wallpapers': wallpapers, 'categories': category_list, 'searched': searched })
+    
+    return HttpResponseNotFound()  
 
 def wallpaper(request, id):
     item = Wallpaper.objects.get(id=id)
