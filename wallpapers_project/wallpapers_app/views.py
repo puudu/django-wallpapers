@@ -19,7 +19,7 @@ def wallpaper_list(request):
     category_id = request.GET.get('category', 0)
     order_by = request.GET.get('order_by', '-created_at')
 
-    wallpaper_list = Wallpaper.objects.all().filter(published=True).order_by(order_by)
+    wallpaper_list = Wallpaper.objects.all().filter(published=True).filter(screen_type=1).order_by(order_by)
 
     if category_id != 0:
         wallpaper_list = wallpaper_list.filter(category__id=category_id)
@@ -31,13 +31,31 @@ def wallpaper_list(request):
     page = request.GET.get('page')
     wallpapers = p.get_page(page)
 
-    return render(request, 'main/wallpaper_list.html', {'wallpapers': wallpapers, 'categories': category_list})
+    return render(request, 'main/wallpaper_list.html', {'wallpapers': wallpapers, 'categories': category_list, 'screen_type': 'Horizontal'})
+
+def wallpaper_list_mobile(request):
+    category_id = request.GET.get('category', 0)
+    order_by = request.GET.get('order_by', '-created_at')
+
+    wallpaper_list = Wallpaper.objects.all().filter(published=True).filter(screen_type=2).order_by(order_by)
+
+    if category_id != 0:
+        wallpaper_list = wallpaper_list.filter(category__id=category_id)
+
+    category_list = Category.objects.all().order_by('name')
+
+    # Set up Pagination
+    p = Paginator(wallpaper_list, 20)
+    page = request.GET.get('page')
+    wallpapers = p.get_page(page)
+
+    return render(request, 'main/wallpaper_list.html', {'wallpapers': wallpapers, 'categories': category_list, 'screen_type': 'Vertical'})
 
 def wallpaper_list_search(request):
     if request.method == "POST":
         searched = request.POST['searched']
 
-        wallpaper_list = Wallpaper.objects.filter(title__icontains=searched).order_by('-created_at')
+        wallpaper_list = Wallpaper.objects.filter(title__icontains=searched).filter(screen_type=1).order_by('-created_at')
         category_list = Category.objects.all().order_by('name')
 
         # Set up Pagination
@@ -45,7 +63,23 @@ def wallpaper_list_search(request):
         page = request.GET.get('page')
         wallpapers = p.get_page(page)
 
-        return render(request, 'main/wallpaper_list.html', {'wallpapers': wallpapers, 'categories': category_list, 'searched': searched })
+        return render(request, 'main/wallpaper_list.html', {'wallpapers': wallpapers, 'categories': category_list, 'screen_type': 'Horizontal', 'searched': searched })
+    
+    return HttpResponseNotFound()  
+
+def wallpaper_list_mobile_search(request):
+    if request.method == "POST":
+        searched = request.POST['searched']
+
+        wallpaper_list = Wallpaper.objects.filter(title__icontains=searched).filter(screen_type=2).order_by('-created_at')
+        category_list = Category.objects.all().order_by('name')
+
+        # Set up Pagination
+        p = Paginator(wallpaper_list, 20)
+        page = request.GET.get('page')
+        wallpapers = p.get_page(page)
+
+        return render(request, 'main/wallpaper_list.html', {'wallpapers': wallpapers, 'categories': category_list, 'screen_type': 'Vertical', 'searched': searched })
     
     return HttpResponseNotFound()  
 

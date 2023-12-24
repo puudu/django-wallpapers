@@ -13,6 +13,9 @@ module.exports = {
                 "custom-green": "#C2EDCF",
                 "custom-white": "#F6F7F2",
             },
+            aspectRatio: {
+                '9/16': '9 / 16',
+              },
         },
     },
     plugins: [],

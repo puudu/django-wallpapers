@@ -8,15 +8,34 @@
         <p class="text-center my-2">No ha resultados</p>
         {% else %}
         <div
-            class="mx-3 grid grid-cols-1 justify-items-center gap-5 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
+            class="mx-3 grid justify-items-center gap-5
+            {% if screen_type == 'Vertical' %}
+                grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8
+            {% else %}
+                grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4
+            {% endif %}
+            
+            "
         >
                 {% for wallpaper in wallpapers %}
                 <div
-                    class="group relative aspect-video cursor-pointer items-center justify-center overflow-hidden rounded-sm transition-shadow hover:shadow-xl hover:shadow-black/30"
+                    class="group relative  cursor-pointer items-center justify-center overflow-hidden rounded-sm transition-shadow hover:shadow-xl hover:shadow-black/30
+                    {% if screen_type == 'Vertical' %}
+                        aspect-9/16
+                    {% else %}
+                        aspect-video
+                    {% endif %}
+                    "
                 >
                     <a href="/wallpaper/{{wallpaper.id}}">
                         <img
-                        class="aspect-video object-cover transition-transform duration-500 group-hover:scale-125"
+                        class="object-cover transition-transform duration-500 group-hover:scale-125
+                        {% if screen_type == 'Vertical' %}
+                        aspect-9/16
+                        {% else %}
+                        aspect-video
+                        {% endif %}
+                    "
                         src="{{ wallpaper.img.url }}"
                         alt=""
                         />
@@ -61,7 +80,12 @@
         </div>
     </div>
     <aside class="m-2">
-        <form method=POST action="{% url 'wallpaper_list_search' %}">
+        <form method=POST action="
+        {% if screen_type == 'Vertical' %}
+            {% url 'wallpaper_list_mobile_search' %}
+        {% else %}
+            {% url 'wallpaper_list_search' %}
+        {% endif %}">
             {% csrf_token %}
             <label
                 for="default-search"
@@ -69,7 +93,6 @@
                 >Search</label
             >
             <div class="relative">
-
                 <input
                     type="search"
                     id="default-search"
@@ -89,6 +112,10 @@
                 </button>
             </div>
         </form>
+        <div class="my-2 grid grid-cols-2 gap-2">
+            <a href="/wallpaper-list/desktop" class=" p-1.5 rounded-md text-center border border-custom-dark-cyan-2 {% if screen_type == 'Vertical' %} text-custom-dark-cyan-2 {% else %} bg-custom-dark-cyan-2 text-custom-white {% endif %}"><i class="fa-solid fa-desktop"></i> Escritorio</a>
+            <a href="/wallpaper-list/mobile"  class="p-1.5 rounded-md text-center border border-custom-dark-cyan-2 {% if screen_type == 'Vertical' %} bg-custom-dark-cyan-2 text-custom-white {% else %} text-custom-dark-cyan-2 {% endif %}"><i class="fa-solid fa-mobile-screen"></i> Mobile</a>
+        </div>
         <div class="my-2 flex justify-center">
             <label class="text-sm mr-1">Ordenar por:</label>
             <select class="rounded-md border border-gray-100" name="order_by" id="order_by">
@@ -97,19 +124,30 @@
                 <option value="-download_count" {% if request.GET.order_by == '-download_count' %}selected{% endif %}>Nº descargas</option>
             </select>
         </div>
+
         <div class="my-1.5 grid grid-cols-1">
             <a
-                href="{% url 'wallpaper_list' %}"
+                href="{% if screen_type == 'Vertical' %}
+                    {% url 'wallpaper_list_mobile' %}
+                {% else %}
+                    {% url 'wallpaper_list' %}
+                {% endif %}"
                 class="category-link rounded-sm px-1.5 py-0.5 text-custom-dark-cyan-1 hover:bg-custom-dark-cyan-1 hover:text-custom-white"
                 data-category-id={{0}}
                 >Todos</a
             >
             {% for category in categories %}
             <a
-                href="{% url 'wallpaper_list' %}?category={{category.id}}"
+                href="
+                {% if screen_type == 'Vertical' %}
+                    {% url 'wallpaper_list_mobile' %}?category={{category.id}}
+                {% else %}
+                    {% url 'wallpaper_list' %}?category={{category.id}}
+                {% endif %}"
                 class="category-link rounded-sm px-1.5 py-0.5 text-custom-dark-cyan-1 hover:bg-custom-dark-cyan-1 hover:text-custom-white"
                 data-category-id={{category.id}}
-                >{{category.name}} ({{category.wallpaper_count}})</a
+                >{{category.name}} 
+                ({% if screen_type == 'Vertical' %}{{category.wallpaper_mobile_count}}{% else %}{{category.wallpaper_desktop_count}}{% endif %})</a
             >
             {% endfor %}
         </div>
@@ -130,11 +168,23 @@
             links.forEach(function (link) {
                 var categoryId = link.getAttribute("data-category-id");
                 if (categoryId == 0) {    
-                    link.href = "{% url 'wallpaper_list' %}?order_by=" + selectedOrder;
+                    link.href = 
+                    {% if screen_type == 'Vertical' %}
+                        "{% url 'wallpaper_list_mobile' %}"
+                    {% else %}
+                        "{% url 'wallpaper_list' %}"
+                    {% endif %}
+                    + "?order_by=" + selectedOrder;
                     return;
                 }
                 
-                link.href = "{% url 'wallpaper_list' %}?category=" + categoryId + "&order_by=" + selectedOrder;
+                link.href =      
+                {% if screen_type == 'Vertical' %}
+                    "{% url 'wallpaper_list_mobile' %}"
+                {% else %}
+                    "{% url 'wallpaper_list' %}"
+                {% endif %}
+                + "?category=" + categoryId + "&order_by=" + selectedOrder;
             });
         });
     });
