@@ -1,0 +1,17 @@
+{% extends "main/base.html" %} {% block title %} Crear/Editar categoria {% endblock %}
+{% load tailwind_filters %} {% block content %}
+<div class="m-2">
+   <form method="post">
+        <h1 class="text-center text-xl">
+            Crear/Editar categoria
+        </h1>
+        {% csrf_token %}{{form|crispy}}
+        <button
+            type="submit"
+            class="mx-auto mb-3 w-full rounded-md border-2 border-custom-dark-cyan-2 p-1.5 text-custom-dark-cyan-2 hover:bg-custom-dark-cyan-2 hover:text-custom-white"
+        >
+            Guardar
+        </button>
+   </form>
+</div>
+{% endblock %}

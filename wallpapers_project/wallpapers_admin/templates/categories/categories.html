@@ -1,0 +1,71 @@
+{% extends "main/base.html" %} {% block title %} Administrar categorias {% endblock %} {% block content %}
+<div class="m-2">
+    <h1 class="text-center text-xl font-bold uppercase text-custom-dark-cyan-2 border-custom-dark-cyan-2 border-b-2">Administrar categorias</h1>
+    <div class="grid gap-2 grid-cols-2 my-2">
+        <a  class="text-center bg-custom-dark-cyan-1 text-custom-white p-1.5 rounded-md hover:bg-custom-cyan" href="{% url 'category_create' %}"><i class="fa-solid fa-plus"></i> Crear categoria</a>
+        <h3 class="text-center"><i class="fa-solid fa-database"></i> {{ total_count }} totales</h3>
+    </div>
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
+        <thead class="text-xs text-custom-white uppercase bg-custom-dark-cyan-1 rounded-lg">
+            <tr>
+                <th scope="col" class="px-6 py-3">Nombre</th>
+                <th scope="col" class="px-6 py-3">de escritorio</th>
+                <th scope="col" class="px-6 py-3">de movil</th>
+                <th scope="col" class="px-6 py-3">editar</th>
+                <th scope="col" class="px-6 py-3">borrar</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for category in categories %}
+            <tr class="border-b">
+                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">{{category.name}}</th>
+                <th>{{category.wallpaper_desktop_count}}</th>
+                <th>{{category.wallpaper_mobile_count}}</th>
+                <th>
+                    <div class="flex justify-center">
+                            <a class="rounded-md bg-custom-dark-cyan-1 text-custom-white p-2.5 hover:bg-custom-cyan" type="submit" href="{% url 'category_edit' id=category.pk %}"><i class="fa-solid fa-pen-to-square"></i></a>
+                    </div>
+                </th>
+                <th>
+                    <div class="flex justify-center">
+                            <a class="rounded-md bg-red-400 text-custom-white p-2.5 hover:bg-red-200" type="submit" href="{% url 'category_delete' id=category.pk %}"><i class="fa-solid fa-trash"></i></a>
+                    </div>
+                </th>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <div class="my-3 flex justify-center">
+        {% if categories.has_previous %}
+        <a
+            class="mx-2 flex h-8 w-8 items-center justify-center rounded-full text-custom-dark-cyan-2 hover:bg-custom-cyan"
+            href="?page=1"
+            ><i class="fa-solid fa-angles-left"></i
+        ></a>
+        <a
+            class="mx-2 flex h-8 w-8 items-center justify-center rounded-full text-custom-dark-cyan-2 hover:bg-custom-cyan"
+            href="?page={{ categories.previous_page_number }}"
+            ><i class="fa-solid fa-chevron-left"></i
+        ></a>
+        {% endif %}
+        <p
+            class="mx-2 flex items-center justify-center text-custom-dark-cyan-2"
+        >
+            Página {{ categories.number }} de {{ categories.paginator.num_pages }}
+        </p>
+        {% if categories.has_next %}
+        <a
+            class="mx-2 flex h-8 w-8 items-center justify-center rounded-full text-custom-dark-cyan-2 hover:bg-custom-cyan"
+            href="?page={{ categories.next_page_number }}"
+            ><i class="fa-solid fa-angle-right"></i
+        ></a>
+        <a
+            class="mx-2 flex h-8 w-8 items-center justify-center rounded-full text-custom-dark-cyan-2 hover:bg-custom-cyan"
+            href="?page={{ categories.paginator.num_pages }}"
+            ><i class="fa-solid fa-angles-right"></i
+        ></a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

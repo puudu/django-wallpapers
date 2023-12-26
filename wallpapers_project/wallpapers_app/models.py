@@ -1,7 +1,8 @@
 from django.db import models
-from django.utils import timezone
+from django.dispatch import receiver
 from django.contrib.auth.models import User
 from PIL import Image
+from django.db.models.signals import pre_delete
 
 class Category (models.Model):
     name = models.CharField(max_length=20, unique=True)
@@ -47,10 +48,18 @@ class Wallpaper (models.Model):
             return f"{width}x{height}px"
         else:
             return "N/A"
+
+    def delete(self, *args, **kwargs):
+        self.img.delete()
+        super().delete(*args, **kwargs)
     
     def __str__(self):
         return self.title
-    
+
+@receiver(pre_delete, sender=Wallpaper)
+def delete_wallpaper_image(sender, instance, **kwargs):
+    instance.img.delete()
+
 class Comment(models.Model):
     wallpaper = models.ForeignKey(Wallpaper, on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -17,6 +17,7 @@
                 <th scope="col" class="px-6 py-3">Categoria</th>
                 <th scope="col" class="px-6 py-3">Pantalla</th>
                 <th scope="col" class="px-6 py-3">Aprobación</th>
+                <th scope="col" class="px-6 py-3">Editar</th>
                 <th scope="col" class="px-6 py-3">Eliminar</th>
             </tr>
         </thead>
@@ -50,6 +51,11 @@
                         </form>
                     </div>
                     {% endif %}
+                </th>
+                <th>
+                    <div class="flex justify-center">
+                            <a class="rounded-md bg-custom-dark-cyan-1 text-custom-white p-2.5 hover:bg-custom-cyan" type="submit" href="/update_contribution/{{ wallpaper.id }}/"><i class="fa-solid fa-pen-to-square"></i></a>
+                    </div>
                 </th>
                 <th>
                     <div class="flex justify-center">

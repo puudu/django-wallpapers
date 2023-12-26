@@ -33,21 +33,21 @@
                     <li>
                         <a
                             class="text-custom-dark-cyan-2 hover:bg-custom-dark-cyan-2 hover:text-custom-white mx-1 rounded-sm p-1.5"
-                            href="/home"
+                            href="{% url 'home' %}"
                             >Inicio</a
                         >
                     </li>
                     <li>
                         <a
                             class="text-custom-dark-cyan-2 hover:bg-custom-dark-cyan-2 hover:text-custom-white mx-1 rounded-sm p-1.5"
-                            href="/wallpaper-list/desktop"
+                            href="{% url 'wallpaper_list' %}"
                             >Explorar</a
                         >
                     </li>
                     <li>
                         <a
                             class="text-custom-dark-cyan-2 hover:bg-custom-dark-cyan-2 hover:text-custom-white mx-1 rounded-sm p-1.5"
-                            href="/create-contribution"
+                            href="{% url 'create_contribution' %}"
                             >Crear aporte</a
                         >
                     </li>
@@ -55,8 +55,24 @@
                     <li>
                         <a
                             class="text-custom-dark-cyan-2 hover:bg-custom-dark-cyan-2 hover:text-custom-white mx-1 rounded-sm p-1.5"
-                            href="/admin-wallpapers/contributions"
+                            href="{% url 'contributions' %}"
                             >Administrar aportes
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            class="text-custom-dark-cyan-2 hover:bg-custom-dark-cyan-2 hover:text-custom-white mx-1 rounded-sm p-1.5"
+                            href="{% url 'categories' %}"
+                            >Administrar categorias
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user.is_superuser %}
+                    <li>
+                        <a
+                            class="text-custom-dark-cyan-2 hover:bg-custom-dark-cyan-2 hover:text-custom-white mx-1 rounded-sm p-1.5"
+                            href="/admin"
+                            >Administrar usuarios
                         </a>
                     </li>
                     {% endif %}
@@ -81,7 +97,7 @@
                     {% else %}
                     <li>
                         <a
-                            href="/login"
+                            href="{% url 'login' %}"
                             class="text-custom-dark-cyan-2 hover:bg-custom-dark-cyan-2 hover:text-custom-white mx-1 rounded-md p-1.5"
                             >Iniciar sesión</a
                         >

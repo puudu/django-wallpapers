@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import RegisterForm, WallpaperForm, CommentForm
+from .forms import RegisterForm, WallpaperForm, WallpaperUpdateForm, CommentForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from .models import Wallpaper, Category, Comment
@@ -10,6 +10,7 @@ from django.core.paginator import Paginator
 # Messages
 from django.contrib import messages
 
+from django.contrib.admin.views.decorators import staff_member_required
 
 # Create your views here.
 def home(request):
@@ -125,7 +126,24 @@ def create_contribution(request):
     else:
         form = WallpaperForm()
 
-    return render(request, 'main/create_contribution.html', {"form": form})
+    return render(request, 'forms/create_contribution.html', {"form": form})
+
+@staff_member_required
+def update_contribution(request, id):
+    wallpaper = get_object_or_404(Wallpaper, pk=id)
+
+    if request.method == 'POST':
+        form = WallpaperUpdateForm(request.POST, instance=wallpaper)
+        if form.is_valid():
+            form.save()
+            messages.success(request, ('La información del wallpaper ha sido actualizada con éxito.'))
+            return redirect('/admin-wallpapers/contributions')
+    
+    else:
+        form = WallpaperUpdateForm(instance=wallpaper)
+    
+    return render(request, 'forms/update_contribution.html', {'form': form, 'wallpaper': wallpaper})
+
 
 @login_required(login_url="/login")
 def create_comment(request, id):
@@ -141,7 +159,7 @@ def create_comment(request, id):
     else:
         form = CommentForm()
 
-    return render(request, 'main/create_contribution.html', {"form": form})
+    return render(request, 'forms/create_contribution.html', {"form": form})
 
 def sign_up(request):
     if request.method == 'POST':

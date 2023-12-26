@@ -1,8 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.admin.views.decorators import staff_member_required
-from wallpapers_app.models import Wallpaper
+from wallpapers_app.models import Wallpaper, Category
+from wallpapers_app.forms import CategoryForm
 # Pagination
 from django.core.paginator import Paginator
+# Messages
+from django.contrib import messages
 
 @staff_member_required
 def contributions(request):
@@ -32,3 +35,54 @@ def contributions(request):
     wallpapers = p.get_page(page)
 
     return render(request, 'contributions.html', {'wallpapers': wallpapers, 'approved_count':approved_count, 'to_approve_count':to_approve_count, 'total_count':total_count})
+
+
+@staff_member_required
+def categories(request):
+    category_list = Category.objects.all().order_by('name')
+    total_count = category_list.count()
+    
+    # Set up Pagination
+    p = Paginator(category_list, 15)
+    page = request.GET.get('page')
+    categories = p.get_page(page)
+
+    return render(request, 'categories/categories.html', {'categories': categories, 'total_count':total_count})
+
+
+@staff_member_required
+def category_create(request):
+    if request.method == "POST":
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            category = form.save(commit=False)
+            category.save()
+            messages.success(request, ('La categoria ha sido creada con exito.'))
+            return redirect('/admin-wallpapers/categories')
+    else:
+        form = CategoryForm()
+    
+    return render(request, 'categories/categories-edit.html', {'form':form})
+
+@staff_member_required
+def category_edit(request, id):
+    category = get_object_or_404(Category, pk=id)
+    if request.method == "POST":
+        form = CategoryForm(request.POST, instance=category)
+        if form.is_valid():
+            category = form.save(commit=False)
+            category.save()
+            messages.success(request, ('La categoria ha sido modificada con exito.'))
+            return redirect('/admin-wallpapers/categories')
+    else:
+        form = CategoryForm(instance=category)
+
+    return render(request, 'categories/categories-edit.html', {'form':form})
+
+
+@staff_member_required
+def category_delete(request, id):
+    category = get_object_or_404(Category, pk=id)
+    category.delete()
+    messages.success(request, ('La categoria ha sido borrada con exito.'))
+    return redirect('/admin-wallpapers/categories')
