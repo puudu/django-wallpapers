@@ -6,7 +6,7 @@ Aplicación web diseñada para descargar y compartir fondos de pantalla.
 * Explora una amplia variedad de fondos de pantalla con listas paginadas, utilizando diversos filtros, categorías, tipos de pantalla y opciones de  orden.
 * Comparte con la comunidad cargando tus propios fondos de pantalla.
 * Participa en la conversación comentando sobre las contribuciones de otros usuarios.
-* Panel de administracion, gestiona las contribuciones de los usuarios y las  categorías disponibles.
+* Panel de administracion, gestiona las contribuciones de los usuarios, las  categorías disponibles y los usuarios registrados.
 
 ## 💻 Tecnologías/Frameworks/Librerias
 * [Django](https://www.djangoproject.com/)
